@@ -8,7 +8,7 @@ on:
 jobs:
   build-ipa:
     name: Build iOS IPA Package
-    runs-on: macos-14
+    runs-on: macos-latest
 
     steps:
       - name: Checkout Codebase
@@ -65,3 +65,4 @@ jobs:
           name: ChessMasterAI-iOS-IPA
           path: build/ChessMasterAI.ipa
           retention-days: 30
+
