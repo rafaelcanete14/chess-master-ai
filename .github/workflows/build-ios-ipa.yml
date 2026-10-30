@@ -1,0 +1,67 @@
+name: Build and Export iOS IPA
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-ipa:
+    name: Build iOS IPA Package
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Project Dependencies
+        run: npm ci
+
+      - name: Generate Native iOS Project (Expo Prebuild)
+        run: npx expo prebuild --platform ios --clean
+
+      - name: Discover Xcode Workspace and Scheme
+        run: |
+          WORKSPACE=$(find ios -name "*.xcworkspace" -maxdepth 1 | head -n 1)
+          SCHEME=$(xcodebuild -workspace "$WORKSPACE" -list -json | node -e '
+            const fs = require("fs");
+            const data = JSON.parse(fs.readFileSync(0, "utf-8"));
+            console.log(data.workspace.schemes[0]);
+          ')
+          echo "Discovered Workspace: $WORKSPACE"
+          echo "Discovered Scheme: $SCHEME"
+          echo "WORKSPACE=$WORKSPACE" >> $GITHUB_ENV
+          echo "SCHEME=$SCHEME" >> $GITHUB_ENV
+
+      - name: Compile and Archive iOS Application
+        run: |
+          xcodebuild -workspace "$WORKSPACE" \
+            -scheme "$SCHEME" \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
+
+      - name: Package .app into .ipa
+        run: |
+          mkdir -p build/Payload
+          APP_PATH=$(find build/Build/Products/Release-iphoneos -name "*.app" -maxdepth 1 | head -n 1)
+          echo "Found compiled app at: $APP_PATH"
+          cp -r "$APP_PATH" build/Payload/
+          cd build && zip -r ChessMasterAI.ipa Payload
+          ls -lh ChessMasterAI.ipa
+
+      - name: Upload IPA to GitHub Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChessMasterAI-iOS-IPA
+          path: build/ChessMasterAI.ipa
+          retention-days: 30
