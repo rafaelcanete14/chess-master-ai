@@ -72,3 +72,4 @@ describe('Local Persistence, Clocks & PGN Suite', () => {
     expect(pgn).toContain('2. Nf3 d6');
   });
 });
+

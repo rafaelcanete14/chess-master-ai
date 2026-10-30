@@ -84,3 +84,4 @@ const styles = StyleSheet.create({
     color: UI_COLORS.danger,
   },
 });
+

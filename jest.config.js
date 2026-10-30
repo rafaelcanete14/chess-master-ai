@@ -19,3 +19,4 @@ module.exports = {
     '^expo-av$': '<rootDir>/__mocks__/expo-av.js'
   }
 };
+

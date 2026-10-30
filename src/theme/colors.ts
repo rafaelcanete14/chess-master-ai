@@ -79,3 +79,4 @@ export const UI_COLORS = {
   white: '#FFFFFF',
   gold: '#FBBF24',
 };
+

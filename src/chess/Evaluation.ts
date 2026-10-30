@@ -227,3 +227,4 @@ export function getCapturedPieces(chess: Chess): {
 
   return { whiteCaptures, blackCaptures, scoreAdvantage };
 }
+

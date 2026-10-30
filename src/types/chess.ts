@@ -118,3 +118,4 @@ export interface Lesson {
   interactiveMoves?: { from: Square; to: Square; comment: string }[];
   keyTakeaway: string;
 }
+

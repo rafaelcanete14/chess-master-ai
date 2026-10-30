@@ -12,3 +12,4 @@ module.exports = {
     setAudioModeAsync: jest.fn()
   }
 };
+

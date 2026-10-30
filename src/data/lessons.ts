@@ -106,3 +106,4 @@ export const CHESS_LESSONS: Lesson[] = [
     keyTakeaway: 'Do not let the enemy king escape forward; alternate ranks until checkmate!',
   },
 ];
+

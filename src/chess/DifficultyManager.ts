@@ -94,3 +94,4 @@ export const DIFFICULTY_CONFIGS: Record<DifficultyLevel, DifficultyConfig> = {
 export function getDifficultyConfig(level: DifficultyLevel): DifficultyConfig {
   return DIFFICULTY_CONFIGS[level] || DIFFICULTY_CONFIGS[4];
 }
+

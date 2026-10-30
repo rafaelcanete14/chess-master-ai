@@ -179,3 +179,4 @@ export const CHESS_PUZZLES: Puzzle[] = [
     description: 'Promote the passed pawn on b8 to a Queen.',
   },
 ];
+
